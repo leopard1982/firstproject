@@ -11,7 +11,6 @@ function App() {
           <p>Oke besok lagi</p>
           <p>Tetap semangat</p>
           <p>Just Enjoy!</p>
-          <p>Yoi Bos</p>
         </p>
         <a
           className="App-link"
