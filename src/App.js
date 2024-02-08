@@ -2,15 +2,27 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const nama="Suryo Adhy Chandra";
+  const detail=['suryo','adhy','chandra'];
+  const myfunct = () => {
+    return detail[Math.floor(Math.random()*3)]
+  };
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
-          <p>Oke besok lagi</p>
-          <p>Tetap semangat</p>
-          <p>Just Enjoy!</p>
+          <p>{myfunct()} Tetap semangat</p>
+          <p>
+            <ul>
+              {detail.map((data)=>{
+                return(
+                  <li style={{listStyleType: "none"}}>{data}</li>
+                  )
+              })}
+            </ul>
+          </p>
         </p>
         <a
           className="App-link"
@@ -20,7 +32,6 @@ function App() {
         >
           Learn React
         </a>
-        <p>Hallo Friend</p>
       </header>
     </div>
   );
