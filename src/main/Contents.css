@@ -1,0 +1,17 @@
+.hello {
+  color:red;
+}
+
+.mybutton[thecheck="yes"]:hover {
+  color: red;
+  cursor:pointer;
+}
+
+.mybutton[thecheck="no"]:hover {
+  color: black;
+  cursor:no-drop;
+}
+
+.testnya {
+  color:green;
+}
