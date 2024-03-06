@@ -2,15 +2,20 @@ import {useState} from 'react';
 import './Contents.css';
 import ListItem from '../components/ListItem';
 import AddItem from '../components/AddItem';
+import SearchItem from '../components/SearchItem';
+import Pieces from '../components/Pieces';
 
 const Contents = () => {
-	const [arrayku,setArrayku]=useState(JSON.parse(localStorage.getItem('listItem')));
+	const [arrayku,setArrayku]=useState(localStorage.getItem('listItem')!==null?JSON.parse(localStorage.getItem('listItem')):[]);
 
 	const [myid,setMyid] = useState(0);
 	const [inputan,setInputan] = useState('');
+	const [search,setSearch]=useState('');
+	const [pencarian,setPencarian]=useState('');
+	const [daftarcari,setDaftarcari]=useState([]);
 
 	const tambahkanNama=()=> {
-		let indeks=arrayku!==[]?arrayku.findIndex((data)=>data.id===myid):-1;
+		let indeks=arrayku?arrayku.findIndex((data)=>data.id===myid):-1;
 		if(indeks===-1) {
 			if(arrayku===[]) {
 				setArrayku([{
@@ -92,11 +97,18 @@ const Contents = () => {
 					<AddItem setID={setMyid} ID={myid} setNama={setInputan} Nama={inputan} tambahkan={tambahkanNama} submitkan={submitkan}/>				
 				</div>			
 			</div>
+			{arrayku.length>0?(
+					<div>
+						<SearchItem setSearch={setSearch} filternya={search}/>
+					</div>
+				):null}
+			
 
 			<div style={{display:'flex',justifyContent:'center',marginBottom:'100px'}}>
 				<div style={{width:'500px',border:'1px solid black',padding:'10px',borderRadius:'10px',marginTop:'30px'}}>
-					<h1>Data Tersimpan</h1><hr/>
+					{search.length===0?(<><h1>Data Tersimpan</h1><hr/></>):(<><h1>Hasil Pencarian Data</h1><hr/></>)}
 					{arrayku.length>0?(<ListItem id="ID" key="header" nama="NAMA" />):null}
+					{arrayku.filter((data)=>data.nama.search(search.replace(/\/\*/,''))===-1?false:true).map((data)=>data).length===0?(<h3>Data Tidak Ditemukan!</h3>):null}
 					{arrayku.length===0?
 					(
 						<div style={{justifyContent:'center',display:'flex'}}>
@@ -105,17 +117,39 @@ const Contents = () => {
 
 					):
 					(
-						arrayku.map((data)=>{
+						arrayku.filter(
+							(data)=>data.nama.search(search)===-1?false:true
+							).map((data)=>{
 							return(
 								<ListItem id={data.id} key={data.id} nama={data.nama} ischecked={data.checked} changeCheckbox={()=>changeCheckbox(data.id)} hapusItem={()=>deleteList(data.id)} hapuskan={"Hapus ID: " + data.id + "???"}/>
 							)
 						})
 					)}	
 					
-					{arrayku.length>0?(<><hr/><p>Jumlah Data: {arrayku.length}</p></>):null}			
+					{arrayku.length>0&&search.length===0?(<><hr/><p>Jumlah Data Tersimpan: {arrayku.length}</p></>):null}
+					{arrayku.length>0&&search.length>0?(<><hr/><p>Jumlah Data Hasil Filter ({search.replace(/\/\*/,'')}): {arrayku.filter((data)=>data.nama.search(search)===-1?false:true).map((data)=>data).length}</p></>):null}			
 				</div>				
 			</div>
-		</main>
+			<p><h1>Pencarian dengan banyak keyword</h1></p>
+			<div style={{display:'flex',justifyContent:'center'}}>
+				<div style={{marginBottom:'100px',display:'flex', flexWrap:'wrap',justifyContent:'left',alignItems:'start',overflowY:'scroll',height:'300px',width:'300px',justifyContent:'left'}}>
+						<p>
+						<input type="text" value={pencarian} style={{border:'none',borderColor:'transparent',height:'20px'}}  onKeyPress={(e)=>{
+							if(e.which==13) {
+								setDaftarcari([...daftarcari,{'nama':pencarian}]);
+								setPencarian('');
+								console.log(daftarcari);
+							}
+						}} onChange={(e)=>{
+							setPencarian(e.target.value);
+						}}placeholder={'cari di sini'}></input>
+						</p>
+						{daftarcari.map((data)=>{
+							return(<Pieces nama={data.nama}/>)
+						})}
+				</div>
+			</div>
+			</main>
 		)
 };
 
