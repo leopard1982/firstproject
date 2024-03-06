@@ -1,4 +1,5 @@
 {
+  "homepage": "https://leopard1982.github.io/firstapp/",
   "name": "firstproject",
   "version": "0.1.0",
   "private": true,
@@ -15,7 +16,6 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://leopard1982.github.io/firstapp",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
